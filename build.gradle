@@ -14,6 +14,9 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.apache.poi:poi-ooxml:+'
+	implementation 'org.apache.poi:poi-scratchpad:+'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
