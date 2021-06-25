@@ -16,6 +16,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.apache.poi:poi-ooxml:+'
 	implementation 'org.apache.poi:poi-scratchpad:+'
+	implementation 'javax:javaee-api:+'
+	implementation 'com.google.guava:guava:+'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

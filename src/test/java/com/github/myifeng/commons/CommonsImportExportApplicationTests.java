@@ -2,12 +2,14 @@ package com.github.myifeng.commons;
 
 import com.github.myifeng.commons.office.factory.ProcessorFactory;
 import com.github.myifeng.commons.office.processor.DocumentProcessor;
+import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -18,33 +20,48 @@ import java.nio.file.Paths;
 @SpringBootTest
 class CommonsImportExportApplicationTests {
 
-    private Path filePath = Paths.get(".\\test\\test.docx");
+    private String testPath = ".test";
+
+    @BeforeEach
+    void initDir(){
+        Paths.get(testPath).toFile().mkdirs();
+    }
 
     @Test
     void testExportWordByReplaceText() throws IOException {
-        //Blank Document
-        XWPFDocument document = new XWPFDocument();
-        //Write the Document in file system
-        FileOutputStream out = new FileOutputStream(filePath.toFile());
-        //create Paragraph
-        XWPFParagraph paragraph = document.createParagraph();
-        XWPFRun run = paragraph.createRun();
-        run.setText("{{SRC1}}");
-        document.write(out);
-        out.close();
-
-        InputStream docInputStream = new FileInputStream(filePath.toFile());
-        DocumentProcessor processor = ProcessorFactory.createDocumentProcessor(docInputStream);
+        DocumentProcessor processor = ProcessorFactory.createDocumentProcessor(this.getClass().getResourceAsStream("/exportByReplaceTextTemplate.doc"));
         processor.replaceText("{{SRC1}}", "DEST1");
-        processor.write(new FileOutputStream(".\\test\\out.docx"));
-        XWPFDocument doc = new XWPFDocument(new FileInputStream(Paths.get(".\\test\\out.docx").toFile()));
-        XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
-        assert "DEST1".equals(extractor.getText());
+        processor.replaceText("SRC2", "DEST2");
+
+        String outPath = Paths.get(testPath,"out.doc").toString();
+        processor.write(new FileOutputStream(outPath));
+        HWPFDocument doc = new HWPFDocument(new FileInputStream(outPath));
+        WordExtractor extractor = new WordExtractor(doc);
+        String text = extractor.getText();
+
+        assert !text.contains("{{SRC1}}");
+        assert text.contains("DEST1");
+        assert !text.contains("SRC2");
+        assert text.contains("DEST2");
     }
 
     @AfterEach
-    void deleteFile() {
-        filePath.toFile().getParentFile().delete();
+    void deleteDir(){
+        deleteFile(Paths.get(testPath).toFile());
+    }
+
+    private boolean deleteFile(File dirFile) {
+        if (!dirFile.exists()) {
+            return false;
+        }
+        if (dirFile.isFile()) {
+            return dirFile.delete();
+        } else {
+            for (File file : dirFile.listFiles()) {
+                deleteFile(file);
+            }
+        }
+        return dirFile.delete();
     }
 
 }
