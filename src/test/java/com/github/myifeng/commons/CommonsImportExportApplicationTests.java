@@ -1,20 +1,15 @@
 package com.github.myifeng.commons;
 
 import com.github.myifeng.commons.office.factory.ProcessorFactory;
-import com.github.myifeng.commons.office.processor.DocumentProcessor;
+import com.github.myifeng.commons.office.processor.WordProcessor;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.extractor.WordExtractor;
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @SpringBootTest
@@ -29,7 +24,7 @@ class CommonsImportExportApplicationTests {
 
     @Test
     void testExportWordByReplaceText() throws IOException {
-        DocumentProcessor processor = ProcessorFactory.createDocumentProcessor(this.getClass().getResourceAsStream("/exportByReplaceTextTemplate.doc"));
+        WordProcessor processor = ProcessorFactory.createWordProcessor(this.getClass().getResourceAsStream("/exportByReplaceTextTemplate.doc"));
         processor.replaceText("{{SRC1}}", "DEST1");
         processor.replaceText("SRC2", "DEST2");
 

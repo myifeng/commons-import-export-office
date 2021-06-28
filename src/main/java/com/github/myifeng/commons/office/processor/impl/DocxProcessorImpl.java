@@ -1,6 +1,6 @@
 package com.github.myifeng.commons.office.processor.impl;
 
-import com.github.myifeng.commons.office.processor.DocumentProcessor;
+import com.github.myifeng.commons.office.processor.WordProcessor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -8,11 +8,16 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class Document2007ProcessorImpl implements DocumentProcessor {
+
+/**
+ * Processor the new Word 2007 .docx by XWPFDocument.
+ * @author myifeng
+ */
+public class DocxProcessorImpl implements WordProcessor {
 
 	private XWPFDocument doc;
 
-	public Document2007ProcessorImpl(XWPFDocument doc) {
+	public DocxProcessorImpl(XWPFDocument doc) {
 		this.doc = doc;
 	}
 

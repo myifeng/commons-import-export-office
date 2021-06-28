@@ -1,16 +1,20 @@
 package com.github.myifeng.commons.office.processor.impl;
 
-import com.github.myifeng.commons.office.processor.DocumentProcessor;
+import com.github.myifeng.commons.office.processor.WordProcessor;
 import org.apache.poi.hwpf.HWPFDocument;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class DocumentProcessorImpl implements DocumentProcessor {
+/**
+ * Processor the Microsoft Word 97(-2007) file by HWPFDocument.
+ * @author myifeng
+ */
+public class DocProcessorImpl implements WordProcessor {
 	
 	private HWPFDocument doc;
 
-	public DocumentProcessorImpl(HWPFDocument doc) {
+	public DocProcessorImpl(HWPFDocument doc) {
 		this.doc = doc;
 	}
 	
