@@ -19,6 +19,13 @@ public interface WordProcessor {
     void replaceText(String src, String dest);
 
     /**
+     * Replace (all instances of) a piece of text with object field...
+     * @param object
+     * The replacement object, (e.g., User{name="Jack", age=18, friends=[User{name="Tom", age=16}, User{name="Susan", age=19}]})
+     */
+    void replaceText(Object object);
+
+    /**
      * Write out this document to an OutputStream
      * @param out
      * the java OutputStream you wish to write the file to

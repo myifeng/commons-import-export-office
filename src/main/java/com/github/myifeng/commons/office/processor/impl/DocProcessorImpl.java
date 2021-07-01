@@ -24,7 +24,15 @@ public class DocProcessorImpl implements WordProcessor {
 	}
 
 	@Override
+	public void replaceText(Object object) {
+		//TODO: Get all the fields of the object
+		//TODO: Get field type and value by reflect
+		//TODO: Process text
+	}
+
+	@Override
 	public void write(OutputStream out) throws IOException {
 		doc.write(out);
 	}
+
 }
