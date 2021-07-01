@@ -23,7 +23,7 @@ public interface WordProcessor {
      * @param object
      * The replacement object, (e.g., User{name="Jack", age=18, friends=[User{name="Tom", age=16}, User{name="Susan", age=19}]})
      */
-    void replaceText(Object object);
+    void writeEntity(Object object);
 
     /**
      * Write out this document to an OutputStream

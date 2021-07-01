@@ -1,6 +1,7 @@
 package com.github.myifeng.commons;
 
 import com.github.myifeng.commons.office.factory.ProcessorFactory;
+import com.github.myifeng.commons.office.processor.User;
 import com.github.myifeng.commons.office.processor.WordProcessor;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.extractor.WordExtractor;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 @SpringBootTest
 class CommonsImportExportApplicationTests {
@@ -24,9 +26,17 @@ class CommonsImportExportApplicationTests {
 
     @Test
     void testExportWordByReplaceText() throws IOException {
+        User user = new User();
+        user.setUserName("table1");
+        user.setAge(18);
+        User user1 = new User();
+        user1.setUsers(Arrays.asList(user));
+        user1.setAge(19);
+        user1.setUserName("TTTT");
         WordProcessor processor = ProcessorFactory.createWordProcessor(this.getClass().getResourceAsStream("/exportByReplaceTextTemplate.doc"));
         processor.replaceText("{{SRC1}}", "DEST1");
         processor.replaceText("SRC2", "DEST2");
+        processor.writeEntity(user1);
 
         String outPath = Paths.get(testPath,"out.doc").toString();
         processor.write(new FileOutputStream(outPath));

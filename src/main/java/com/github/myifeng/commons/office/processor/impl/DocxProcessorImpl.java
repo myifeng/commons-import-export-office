@@ -35,7 +35,7 @@ public class DocxProcessorImpl implements WordProcessor {
 	}
 
 	@Override
-	public void replaceText(Object object) {
+	public void writeEntity(Object object) {
 		//TODO: Get all the fields of the object
 		//TODO: Get field type and value by reflect
 		//TODO: Process text
