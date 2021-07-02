@@ -2,10 +2,12 @@ package com.github.myifeng.commons.office.processor.impl;
 
 import com.github.myifeng.commons.office.processor.WordProcessor;
 import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.usermodel.Bookmark;
+import org.apache.poi.hwpf.usermodel.Range;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
+import java.lang.reflect.Field;
 import java.util.stream.Stream;
 
 /**
@@ -28,23 +30,31 @@ public class DocProcessorImpl implements WordProcessor {
 
     @Override
     public void writeEntity(Object object) {
-        Stream.of(object.getClass().getDeclaredFields()).forEach(field -> {
-            try {
-                field.setAccessible(true);
-                String name = field.getName();
-                Object value = field.get(object);
-                Class<?> type = field.getType();
-                if (Collection.class.isAssignableFrom(type)) {
-                    //TODO: Process table
+        Stream.iterate(0, n -> n + 1)
+                .limit(doc.getBookmarks().getBookmarksCount())
+                .forEach(i -> {
+                    try {
+                        Bookmark bookmark = doc.getBookmarks().getBookmark(i);
+                        Field field = object.getClass().getDeclaredField(bookmark.getName());
+                        field.setAccessible(true);
+                        Object value = field.get(object);
+                        if (value != null) {
+                            Range range = new Range(bookmark.getStart(), bookmark.getEnd(), doc);
+                            if (range.getParagraph(0).isInTable()) {
+                                //TODO: Process table
 
-                } else {
-                    //TODO: Process text
-
-                }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        });
+                            } else {
+                                //TODO: Process text, convert data type
+                                range.replaceText(value.toString(), false);
+                            }
+                        }
+                    } catch (NoSuchFieldException e) {
+                        //No field, pass!
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     @Override
